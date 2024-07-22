@@ -17,5 +17,11 @@ jobs:
     - name: Build the Docker image
       run: docker build . 
  # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - uses: actions/checkout@v2
+    - name: SonarQube Scan
+      uses: SonarSource/sonarqube-scan-action@v1.0.0
+      env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     
