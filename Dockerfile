@@ -14,4 +14,5 @@ ENV IDF_PATH=/opt/esp/idf
 RUN /bin/bash -c ". $IDF_PATH/export.sh; idf.py --version"
 
 # Default command to build the project
+# CMD ["/bin/bash", "-c", ". $IDF_PATH/export.sh; idf.py build"]
 CMD ["/bin/bash", "-c", ". $IDF_PATH/export.sh; idf.py build"]
