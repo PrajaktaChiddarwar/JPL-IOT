@@ -23,10 +23,11 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
     - name: Sonarcube analysis
       run: 
-          sonar-scanner\
-          -D"sonar.projectKey=JPL-IOT" 
-          -D"sonar.sources=." 
-          -D"sonar.host.url=http://localhost:9099" 
-          -D"sonar.token=squ_e88a9f97f6c3816b30c1fad415d880aa13e84d1b"
+          # sonar-scanner\
+          # -D"sonar.projectKey=JPL-IOT" 
+          # -D"sonar.sources=." 
+          # -D"sonar.host.url=http://localhost:9099" 
+          # -D"sonar.token=squ_e88a9f97f6c3816b30c1fad415d880aa13e84d1b"
+          sonar-scanner.bat -D"sonar.projectKey=JPL-IOT" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9099" -D"sonar.token=squ_e88a9f97f6c3816b30c1fad415d880aa13e84d1b"
       
     
