@@ -1,1 +1,3 @@
 C:/Program Files/sonar-scanner-6.1.0.4477-windows-x64/bin/sonar-scanner.bat -D"sonar.projectKey=JPL-IOT" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9099" -D"sonar.token=sqp_4ed7d145487fde059655da003b3cc04ced69526c"
+C:/Program Files/sonar-scanner-6.1.0.4477-windows-x64/bin/sonar-scanner -D"sonar.projectKey=JPL-IOT" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9099" -D"sonar.token=sqp_4ed7d145487fde059655da003b3cc04ced69526c"
+sonar-scanner.bat -D"sonar.projectKey=JPL-IOT" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9099" -D"sonar.token=squ_e88a9f97f6c3816b30c1fad415d880aa13e84d1b"
