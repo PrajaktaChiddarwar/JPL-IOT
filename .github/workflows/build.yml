@@ -17,11 +17,12 @@ jobs:
     - name: Build the Docker image
       run: docker build . 
 
-    - uses: sonarsource/sonarqube-scan-action@master
-      env:
-          SONAR_TOKEN: squ_e88a9f97f6c3816b30c1fad415d880aa13e84d1b
-          SONAR_HOST_URL: http://localhost:9099
+    # - uses: sonarsource/sonarqube-scan-action@master
+    #   env:
+    #       SONAR_TOKEN: squ_e88a9f97f6c3816b30c1fad415d880aa13e84d1b
+    #       SONAR_HOST_URL: http://localhost:9099
 
+    - uses: sonarsource/sonarqube-scan-action@master
     - name: Check SonarQube server connectivity
       run: curl -v http://localhost:9099
 
