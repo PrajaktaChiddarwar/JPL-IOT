@@ -8,52 +8,57 @@ on:
 
 jobs:
   cppcheck:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
     - name: Install Cppcheck
-      run: sudo apt-get install -y cppcheck
+      run: choco install cppcheck
 
     - name: Run Cppcheck
       run: |
-        cppcheck --enable=all --inconclusive --xml --xml-version=2 . 2> cppcheck-result.xml || (echo "Cppcheck failed" && exit 1)
-        
+        cppcheck --enable=all --inconclusive --xml --xml-version=2 . 2> cppcheck-result.xml
+        if (!$?) { echo "Cppcheck failed"; exit 1 }
+
     - name: Verify Cppcheck Result
       run: |
-        if [ -f cppcheck-result.xml ]; then
+        if (Test-Path -Path cppcheck-result.xml) {
           echo "Cppcheck result file exists:"
-          cat cppcheck-result.xml
-        else
+          Get-Content cppcheck-result.xml
+        }
+        else {
           echo "Cppcheck result file not found."
           exit 1
-        fi
+        }
 
     - name: Upload Cppcheck results
-      if: always()  # Ensure this step runs even if previous steps fail
+      if: always()
       uses: actions/upload-artifact@v2
       with:
         name: cppcheck-result
         path: cppcheck-result.xml
 
     - name: Annotate Cppcheck results
-      if: always()  # Ensure this step runs even if previous steps fail
+      if: always()
       run: |
         echo "::group::Cppcheck Annotations"
-        if [ -f cppcheck-result.xml ]; then
-          grep "<error " cppcheck-result.xml | while IFS= read -r line; do
-            file=$(echo "$line" | grep -oP 'file="\K[^"]+')
-            line_number=$(echo "$line" | grep -oP 'line="\K[^"]+')
-            message=$(echo "$line" | grep -oP 'msg="\K[^"]+')
-            if [ -n "$file" ] && [ -n "$line_number" ] && [ -n "$message" ]; then
+        if (Test-Path -Path cppcheck-result.xml) {
+          $errors = Select-String -Path cppcheck-result.xml -Pattern "<error "
+          foreach ($error in $errors) {
+            $file = $error -match 'file="([^"]+)"' | Out-Null; $file = $matches[1]
+            $line_number = $error -match 'line="([^"]+)"' | Out-Null; $line_number = $matches[1]
+            $message = $error -match 'msg="([^"]+)"' | Out-Null; $message = $matches[1]
+            if ($file -and $line_number -and $message) {
               echo "::warning file=$file,line=$line_number::Cppcheck: $message"
-            else
-              echo "Skipping malformed line: $line"
-            fi
-          done
-        else
+            }
+            else {
+              echo "Skipping malformed line: $error"
+            }
+          }
+        }
+        else {
           echo "Cppcheck result file not found for annotations."
-        fi
+        }
         echo "::endgroup::"
