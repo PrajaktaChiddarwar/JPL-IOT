@@ -59,9 +59,11 @@ extern const uint8_t favicon_ico_end[]				asm("_binary_favicon_ico_end");
 
 /**
  * Checks the g_fw_update_status and creates the fw_update_reset timer if g_fw_update_status is true.
- */
+ */ 
 static void http_server_fw_update_reset_timer(void)
 {
+	
+
 	if (g_fw_update_status == OTA_UPDATE_SUCCESSFUL)
 	{
 		ESP_LOGI(TAG, "http_server_fw_update_reset_timer: FW updated successful starting FW update reset timer");
@@ -74,6 +76,8 @@ static void http_server_fw_update_reset_timer(void)
 	{
 		ESP_LOGI(TAG, "http_server_fw_update_reset_timer: FW update unsuccessful");
 	}
+
+	
 }
 
 /**
