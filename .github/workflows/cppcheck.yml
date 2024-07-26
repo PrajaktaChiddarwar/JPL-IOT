@@ -5,9 +5,9 @@
 #   pull_request:
 #     branches: [main]
 
-jobs:
-  cppcheck:
-    runs-on: ubuntu-latest
+# jobs:
+#   cppcheck:
+#     runs-on: ubuntu-latest
 
 #     steps:
 #     - name: Checkout code
