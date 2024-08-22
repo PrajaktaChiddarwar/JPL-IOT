@@ -1,20 +1,49 @@
-# name: Docker Image CI
-
+# name: SonarCloud
 # on:
 #   push:
-#     branches: [ "main" ]
+#     branches:
+#       - main
 #   pull_request:
-#     branches: [ "main" ]
-
+#     types: [opened, synchronize, reopened]
 # jobs:
-
 #   build:
-
-#     runs-on: Ubuntu-latest
-
+#     name: Build and analyze
+#     runs-on: windows-latest
+#     env:
+#       BUILD_WRAPPER_OUT_DIR: .\ # Directory where build-wrapper output will be placed
 #     steps:
-#     - uses: actions/checkout@v4
-#     - name: Build the Docker image
-#       run: docker build . 
+#       - uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+#       - name: Install sonar-scanner and build-wrapper
+#         uses: SonarSource/sonarcloud-github-c-cpp@v3
+#       - name: Run build-wrapper
+#         run: |
+#           build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build . -- -v
+#       - name: Run sonar-scanner
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.JPL-IOT}}
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#         run: |
+#           sonar-scanner --define sonar.cfamily.compile-commands="${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
 
-   
+
+name: Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build-analyze:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and analyze on SonarCloud
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }} # Put the name of your token here
+        run: .\build-analyze.ps1
+        shell: pwsh
+        
