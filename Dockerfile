@@ -10,6 +10,7 @@ COPY . /esp
 # Set up the environment variables
 ENV IDF_PATH=/opt/esp/idf
 
+
 # Ensure the IDF is properly set up by running the export script
 RUN /bin/bash -c ". $IDF_PATH/export.sh; idf.py --version"
 
